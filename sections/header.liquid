@@ -1,0 +1,282 @@
+
+<section>
+  
+ 
+  <div class="header-main">
+    <div class="header-logo" id="bghead">
+      {% if section.settings.headlogo != blank %}
+        <a href="{{ section.settings.logolink }}">
+          <img
+            src="{{ section.settings.headlogo | image_url }}"
+       
+            alt="logo"
+            width="{{ section.settings.logowidth }}"
+            height="{{ section.settings.logoheight }}"
+            loading="lazy"
+        ></a>
+      {% else %}
+        <a href="{{ section.settings.logolink }}">
+          <img
+            src="{{ 'logo.png' | asset_url }}"
+            alt="{{ section.settings.logoalt }}"
+            width="{{ section.settings.logowidth }}"
+            height="{{ section.settings.logoheight }}"
+            loading="lazy"
+        ></a>
+      {% endif %}
+    </div>
+    <div class="header-category">
+
+
+      <ul class="navmain">
+      {% for  link in linklists['main-menu'].links %}
+         <li class="navlink">{{ link.title | link_to: link.url }}</li>
+
+      {% endfor %}
+      
+      </ul>
+      {% comment %}
+        {% assign count = 0 %}
+        {% for collection in collections %}
+          {% if count < 3 %}
+            <p id="{{ collection.handle }}" class="category"> {{ collection.title }}<i class="fa-solid fa-chevron-down iconn "></i></p>
+            {% assign count = count | plus: 1 %}
+          {% endif %}
+        {% endfor %}
+      
+      {% if section.settings['show-collection'] %}
+      <p class="category" onclick="popup()">{{ section.settings.cat1 }}</p>
+      <p class="category">{{ section.settings.cat2 }}</p>
+      <p class="category">{{ section.settings.cat3 }}</p>
+      <button onclick="popup()">hhh</button>
+      
+      {% endif %}
+      {% if section.settings['show-menu'] %}
+        
+          
+      <a href="{{ section.settings.link1 }}">  <p class="menulink">{{ section.settings.menulink1 }}</p></a>
+      <a href="{{ section.settings.link2 }}">  <p class="menulink">{{ section.settings.menulink2}}</p></a>
+        {% endif %}{% endcomment %}
+     
+    </div>
+
+    <div class="header-icons">
+      <form action="/search" id="fm"><input type="search" placeholder="Search Here" class="search"></form>
+      <a href="https://mystoregrit24.myshopify.com/account/"><i id="ic2" class="fa-regular fa-user icon"></i></a>
+      <a href="https://mystoregrit24.myshopify.com/cart/"><i id="ic3" class="fa-solid fa-basket-shopping icon"></i></a>
+      <i id="open-btn" class="fa-solid fa-bars"></i>
+    </div>
+  </div>
+
+
+<div class="sidebar">
+  <i id="close-btn" class="fa-regular fa-rectangle-xmark"></i>
+
+  <div class="header-category2">
+
+
+    <ul class="navmain">
+    {% for  link in linklists['main-menu'].links %}
+       <li class="navlink">{{ link.title | link_to: link.url }}</li>
+
+    {% endfor %}
+    
+    </ul>
+</div>
+
+  
+  
+</section>
+
+
+
+<style>
+  .header-main{
+  background-color: {{ section.settings.bghead }};
+
+  }
+  .navlink a{
+  color: {{ section.settings.navcolor}};
+  text-decoration: none;
+  font-size: {{ section.settings.navsize }};
+ 
+  
+  }
+  .navlink a:hover{
+    color: {{  section.settings.navhover}};
+  }
+  .navmain{
+    gap: {{  section.settings.navgap}};
+  }
+  .header-icons i{
+    font-size: {{section.settings.iconsize}};
+    margin-bottom: 8px;
+}
+
+</style>
+
+<script>
+
+  
+  let closebtn = document.querySelector('#close-btn');
+  let openbtn = document.querySelector('#open-btn');
+
+
+  openbtn.addEventListener('click', function() {
+    console.log("button open")
+  
+  let sidebar = document.querySelector('.sidebar');
+  sidebar.style.display = "flex";
+    
+  });
+
+  closebtn.addEventListener('click', function() {
+    console.log("button close")
+  
+  let sidebar = document.querySelector('.sidebar');
+  sidebar.style.display = "none";
+    
+  });
+  
+  </script>
+
+{% schema %}
+{
+  "name": "header",
+  "settings": [
+    {
+      "type": "color",
+      "id": "bghead",
+      "label": "Header Background Color",
+      "default": "#f1f1f1"
+    },
+    {
+      "type": "url",
+      "id": "logolink",
+      "label": "Logo Link",
+      "default": "/"
+    },
+    {
+      "type": "image_picker",
+      "id": "headlogo",
+      "label": "Logo"
+    },
+    {
+      "type": "text",
+      "id": "logoalt",
+      "label": "Logo Alt Text",
+      "default": "Logo"
+    },
+    {
+      "type": "number",
+      "id": "logowidth",
+      "label": "Logo Width",
+      "default": 140
+    },
+    {
+      "type": "number",
+      "id": "logoheight",
+      "label": "Logo Height",
+      "default": 60
+    }
+    ,
+    {
+    "type": "color",
+    "id": "navcolor",
+    "label": "Nav Link Color",
+    "default": "#3C3B3B"
+    }
+    ,
+    {
+      "type": "color",
+      "id": "navhover",
+      "label": "Nav Link hover color",
+      "default": "#686868"
+      }
+      ,
+    {
+      "type": "range",
+      "id": "navsize",
+      "label": "Nav Link Size",
+      "default": 22,
+      "min": 4,
+      "max": 48,
+      "step": 1,
+      "unit": "px"
+    }
+    ,
+    {
+
+      "type": "range",
+      "id": "iconsize",
+      "label": "Icon Size",
+      "min": 15,
+      "max": 40,
+      "default": 24,
+      "step": 1,
+      "unit": "px"
+    }
+    
+  ],
+  "presets": [
+    {
+      "name": "header"
+    }
+  ]
+}
+{% endschema %}
+{% comment %}
+    {
+      "type": "checkbox",
+      "id": "show-collection",
+      "label": "Show Collection",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "cat1",
+      "label": "Collection 1",
+      "default": "Accessories"
+     
+    },
+    {
+      "type": "text",
+      "id": "cat2",
+      "label": "Collection 2"
+    },
+    {
+      "type": "text",
+      "id": "cat3",
+      "label": "Collection 3"
+    },
+    {
+      "type": "checkbox",
+      "id": "show-menu",
+      "label": "Show Menu",
+      "default": true
+      
+    },
+    {
+      "type": "text",
+      "id": "menulink1",
+      "label": "Link 1 Text",
+      "default": "Contact"
+    },
+    {
+      "type": "url",
+      "id": "link1",
+      "label": "link 1"
+      
+    },
+    {
+      "type": "text",
+      "id": "menulink2",
+      "label": "Link 2 Text",
+      "default": "Help"
+    },
+    {
+      "type": "url",
+      "id": "link2",
+      "label": "link 2"
+    
+    }{% endcomment %}

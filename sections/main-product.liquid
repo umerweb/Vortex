@@ -1,0 +1,308 @@
+{% comment %}
+  The contents of this file control the appearance of individual product pages.
+  Learn more at: https://shopify.dev/docs/themes/liquid/reference/templates/product
+{% endcomment %}
+
+<div class="atc-btn">
+
+  <div class="alert success">
+    <span class="closebtn">&times;</span>  
+    <strong>Success!</strong> Your Product is added to cart
+  </div>
+</div>
+<div class="atc-btn-failed">
+
+  <div class="alert warning">
+    <span class="closebtn">&times;</span>  
+    <strong>Failed!</strong> Your Product was not added to cart.
+  </div>
+</div>
+
+
+
+<div class="firstmainbr">
+
+  <div class="main-breadcrumbs">
+    {% if template contains 'product' %}
+      <nav class="breadcrumbs">
+        <a href="/">Home</a>
+        {% for collection in product.collections %}
+          {% if collection.handle != 'all' %}
+            <span>/</span>
+            <a href="{{ collection.url }}">{{ collection.title }}</a>
+          {% endif %}
+        {% endfor %}
+        <span>/</span>
+        <span>{{ product.title }}</span>
+      </nav>
+    {% elsif template contains 'collection' %}
+      <nav class="breadcrumbs">
+        <a href="/">Home</a>
+        {% for collection in collection.all_products %}
+          {% if collection.handle != 'all' %}
+            <span>/</span>
+            <a href="{{ collection.url }}">{{ collection.title }}</a>
+          {% endif %}
+        {% endfor %}
+      </nav>
+    {% else %}
+      <!-- Code for other templates or pages -->
+    {% endif %}
+
+    
+  </div>
+</div>
+
+<div class="product-wrapper">
+  <div class="product-images">
+    <h1 id="prtile">{{ product.title }}</h1>
+    <!-- Main product image -->
+    <div class="main-image">
+      <img id="mainimg" src="{{ product.featured_image.src | img_url: 'large' }}" alt="{{ product.title }}">
+    </div>
+    <!-- Additional product images -->
+    <div class="other-images">
+      {% for image in product.images %}
+        <img class="otherimg" src="{{ image.src | img_url: 'medium' }}" alt="{{ product.title }}">
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="product-details">
+    {% if product.selected_or_first_available_variant.compare_at_price != null
+      and product.selected_or_first_available_variant.compare_at_price != undefined
+    %}
+        <div class="pprices">
+      <p class="product-compare">{{ product.selected_or_first_available_variant.compare_at_price | money }}</p>
+      <p class="product-original" style="text-decoration: line-through; , color: #8e8e8e;">
+        {{ product.selected_or_first_available_variant.price | money }}
+      </p></div>
+
+    {% else %}
+      <div class="pprices"> <p class="product-original">{{ product.selected_or_first_available_variant.price | money }}</p></div>
+    {% endif %}
+
+    {% comment %}
+      {% if product.variants.size > 1 %}
+        <select name="variant" id="variant">
+          {% for variant in product.variants %}
+
+            <option value="{{ variant.id }}">{{ variant.title }}</option>
+          {% endfor %}
+        </select>
+      {% endif %}
+    {% endcomment %}
+    {% form 'product', product %}
+      <input id="product-id" type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+      {% if product.variants.size > 1 %}
+        <div class="product-option">
+          <table>
+            <tbody>
+              {% for option in product.options_with_values %}
+                <tr>
+                  <td>
+                    <label for="{{ option.name }}">{{ option.name }}</label>
+                  </td>
+                  <td>
+                    <select name="{{ option.name }}" id="{{ option.name }}">
+                      {% for value in option.values %}
+                        <option value="{{ value }}">{{ value }}</option>
+                      {% endfor %}
+                    </select>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% endif %}
+      <div class="posec">
+        <!-- Quantity input -->
+        <input type="number" name="quantity" id="quantity" value="1" min="1">
+        <!-- Add to cart button -->
+         {% if product.available  %}
+        <button id="add-to-cart">Add to Cart</button>
+             {% else %}
+        <p>Sold Out</p>
+
+        {% endif %}
+      </div>
+    {% endform %}
+
+    <div class="tagss">
+      <div class="tag">
+        {% if product %}
+          <p>Tags:</p>
+          <ul>
+            {% for tag in product.tags %}
+              <li>{{ tag }}</li>
+            {% endfor %}
+          </ul>
+          </div>
+          <div class="collectiontag">
+            {% if product.collections.size > 0 %}
+              <p>Collection:</p>
+              <ul>
+                {% for collection in product.collections %}
+                  <li>{{ collection.title }}</li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              <p></p>
+            {% endif %}
+        {% else %}
+          <p></p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="wrapper2">
+  <div class="main-description-sec">
+    <div class="main-navd">
+      <button id="btndesc">Description</button>
+      
+    </div>
+  </div>
+
+  <div class="description-content">
+    <p>{{ product.description }}</p>
+  </div>
+</div>
+<style>
+  .posec p{
+    padding: 16px 25px;
+  border-radius: 10px;
+  margin-left: 10px;
+  background-color: #009f90;
+  color: #f1f1ef;
+  font-weight: 600;
+  font-size: 17px;
+  outline: none;
+  border: none;
+  cursor: not-allowed;
+  display: inline;
+  }
+  .posec p:hover{
+    background-color: rgb(255, 126, 126);
+  }
+</style>
+
+<script>
+ 
+
+    var product = {{ product | json }}
+
+    // Function to update product variant and URL based on selected options
+    function updateProductVariant() {
+      // Find Selected Options
+      var selectedOptions = [];
+    
+      document.querySelectorAll('.product-option select').forEach(select => {
+        selectedOptions.push(select.value);
+      });
+    
+      // Find matched variant
+      var matchedVariant = product.variants.find(variant => {
+        var pass = true;
+        for (var i = 0; i < selectedOptions.length; i++) {
+          if (variant.options[i] !== selectedOptions[i]) {
+            pass = false;
+            break;
+          }
+        }
+        return pass;
+      });
+    
+      // Change product form variant id
+      document.querySelector('#product-id').value = matchedVariant.id;
+    
+      // Change URL
+      var url = new URL(window.location.href);
+      url.searchParams.set('variant', matchedVariant.id);
+      window.history.replaceState(null, null, url.toString());
+    }
+    
+    // Add event listeners to select elements for option change
+    document.querySelectorAll('.product-option select').forEach(select => {
+      select.addEventListener('change', updateProductVariant);
+    });
+    
+    // Call the function to update product variant on initial page load
+    updateProductVariant();
+    let mainimg = document.getElementById('mainimg');
+let otherimgList = document.getElementsByClassName('otherimg');
+
+// Loop through each element with the 'otherimg' class
+for (let i = 0; i < otherimgList.length; i++) {
+    // Attach event listener to each element
+    otherimgList[i].addEventListener('click', function() {
+        // Update the src attribute of the main image with the clicked image's src
+        mainimg.src = this.src; // 'this' refers to the clicked image element
+    });
+}
+
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Add event listener to the "Add to Cart" button
+  var addToCartButton = document.getElementById('add-to-cart');
+  if (addToCartButton) {
+    addToCartButton.addEventListener('click', function(event) {
+      event.preventDefault(); // Prevent default form submission
+      
+      // Gather product information
+      var productId = document.getElementById('product-id').value;
+      var quantity = document.getElementById('quantity').value;
+      
+      // Construct the URL to add the item to the cart
+      var addToCartUrl = '/cart/add.js?quantity=' + quantity + '&id=' + productId;
+
+      // Send a request to add the item to the cart asynchronously
+      fetch(addToCartUrl, {
+        method: 'POST'
+      })
+      .then(response => {
+        // Handle the response as needed (e.g., update the UI)
+        let atcSuccess = document.querySelector('.atc-btn');
+        if (atcSuccess) {
+          atcSuccess.style.display = "flex";
+        }
+        console.log('Product added to cart successfully');
+        // Optionally, you can update the UI to reflect the successful addition
+      })
+      .catch(error => {
+        // Handle errors (e.g., display an error message to the user)
+        console.error('Error adding product to cart:', error);
+        let atcfail = document.getElementsByClassName('atc-btn=failed');
+
+        atcfail.style.display = "flex";
+        // Optionally, you can display an error message to the user
+      });
+    });
+  }
+});
+    
+
+
+// Get all elements with class="closebtn"
+var close = document.getElementsByClassName("closebtn");
+var i;
+
+// Loop through all close buttons
+for (i = 0; i < close.length; i++) {
+  // When someone clicks on a close button
+  close[i].onclick = function(){
+
+    // Get the parent of <span class="closebtn"> (<div class="alert">)
+    var div = this.parentElement;
+
+    // Set the opacity of div to 0 (transparent)
+    div.style.opacity = "0";
+
+    // Hide the div after 600ms (the same amount of milliseconds it takes to fade out)
+    setTimeout(function(){ div.style.display = "none"; }, 600);
+  }
+}
+
+</script>

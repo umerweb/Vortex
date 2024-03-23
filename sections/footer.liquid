@@ -1,0 +1,153 @@
+<section class="footersection">
+  <div class="footer-main">
+    <div class="form-footer">
+      <p>
+        Sign up for early access, news<br>
+        and exclusive offers
+      </p>
+      {% form 'contact' %}
+        {{ form.errors | default_errors }}
+        <input type="hidden" name="form_type" value="customer">
+        <input type="hidden" name="utf8" value="✓">
+
+        <label for="contact_email">Email Address</label>
+        <input type="email" id="contact_email" name="contact[email]" placeholder="Your Email" required>
+        <div id="spacer"></div>
+
+        <button type="submit" class="btns">Subscribe</button>
+      {% endform %}
+    </div>
+
+    <div class="footer-links-main">
+      <div class="footer-links">
+        <span class="pheader">{{ section.settings.footerheading1 }}</span>
+        <span class="linkclass">{{  section.settings.footerlink1label }}</span>
+        <span class="linkclass">{{  section.settings.footerlink2label }}</span>
+        <span class="linkclass">{{  section.settings.footerlink3label }}</span>
+      </div>
+      <div class="footer-links">
+        <span class="pheader">{{ section.settings.footerheading2 }}</span>
+        <span class="linkclass">{{  section.settings.footerlink4label }}</span>
+        <span class="linkclass">{{  section.settings.footerlink5label }}</span>
+        <span class="linkclass">{{  section.settings.footerlink6label }}</span>
+      </div>
+      <div class="footer-links-social">
+        <span class="pheader">{{ section.settings.footerheading3 }}</span>
+        <div>
+       <a href="{{ section.settings.sociallinks1 }}"> <i class="fa-brands fa-facebook"></i></a>
+       <a href="{{ section.settings.sociallinks2 }}"> <i class="fa-brands fa-instagram"></i></a></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-main2">
+    <div class="linksides">
+     
+      <div id="hr"></div>
+      <div class="copyright">
+    <span>{{ section.settings.copyrighttext }}</span></div>
+      
+    </div>
+
+  
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "footer",
+  "settings": [
+
+    {
+        
+      "type": "text",
+      "id": "footerheading1",
+      "label": " Link Heading 1",
+      "default": "Öppetider"
+    },
+    {
+        "type": "text",
+      "id": "footerlink1label",
+      "label": " Month",
+      "default": "Månd: stängt"
+    },
+   
+    {
+        "type": "text",
+      "id": "footerlink2label",
+      "label": "Time",
+      "default": "Tisd-Fred: 12-18"
+    },
+   
+    {
+        "type": "text",
+      "id": "footerlink3label",
+      "label": "Date",
+      "default": "Lörd: 11-14"
+    },
+   
+    {
+        
+        "type": "text",
+        "id": "footerheading2",
+        "label": " Link Heading 2",
+        "default": "Kontakta oss"
+      },
+      {
+        "type": "text",
+      "id": "footerlink4label",
+      "label": "Email 1",
+      "default": "butik@mystorevortex.se"
+    },
+   
+    {
+        "type": "text",
+      "id": "footerlink5label",
+      "label": "Email 2",
+      "default": "service@mystorevortex.se"
+    },
+   
+    {
+        "type": "text",
+      "id": "footerlink6label",
+      "label": " Conatact NO",
+      "default": "031-000000"
+    },
+   
+    {
+        
+        "type": "text",
+        "id": "footerheading3",
+        "label": " Link Heading 3",
+        "default": "Vi är sociala"
+      },
+    {
+
+      "type": "url",
+      "id": "sociallinks1",
+      "label": "Social Link 1"
+      
+    },
+    {
+
+      "type": "url",
+      "id": "sociallinks2",
+      "label": "Social Link 2"
+      
+    },
+   
+    {
+    "type": "text",
+    "id": "copyrighttext",
+    "label": "CopyRight Text",
+    "default": " © 2024. copyRight."
+    }
+   
+  ],
+  "presets": [
+    {
+      "name": "footer"
+    }
+  ]
+}
+{% endschema %}

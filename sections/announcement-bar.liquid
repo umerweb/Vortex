@@ -1,0 +1,156 @@
+{% if section.settings['show-announcement'] %}
+  <section>
+    <div class="an-main">
+
+
+      <div class="an-right">
+         <p id="pdes"> {{ section.settings.pdes }}</p>
+
+        </div>
+      <div class="an-left">
+
+
+       {% if section.settings.image != blank %}
+
+          <a href="{{ section.settings.link1 }}">   <img 
+            width="25px"
+            height="25px"
+            loading="lazy"
+            src = "{{ section.settings.image   | image_url }}"></a>
+
+        {% else %}
+        <a href="{{ section.settings.link1 }}">  <img
+             width="25px"
+            height="25px"
+            loading="lazy"
+            src = "{{ 'a.png' | asset_url }}"></a>
+        
+
+        {% endif %}
+        {% if section.settings.image2 != blank %}
+
+          <a href="{{  section.settings.link2 }}">  <img 
+                width="25px"
+                height="25px"
+                loading="lazy"
+                src = "{{ section.settings.image2   | image_url }}"></a>
+    
+            {% else %}
+            <a href="{{  section.settings.link2 }}"><img
+                width="25px"
+                height="25px"
+                loading="lazy"
+                src = "{{ 'b.png' | asset_url }}"></a>
+    
+            {% endif %}
+
+
+      </div>
+
+    </div>
+  </section>
+{% endif %}
+
+<style>
+.an-main{
+    background-color: {{ section.settings.bgcolor }};
+    z-index: 0;
+
+
+}
+#pdes{
+    color: {{ section.settings.txtcolor }};
+    font-family: {{ section.settings.txtfam }};
+    z-index: 1;
+    font-size: {{ section.settings.font_size }};
+    font-weight: 600;
+
+}
+</style>
+{% schema %}
+{
+  "name": "announcement bar",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show-announcement",
+      "label": "Show Announcment",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "pdes",
+      "label": "label",
+      "default": "Welcome to Our Store"
+    }
+    ,
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Icon"
+    
+    }
+    ,
+    {
+      "type": "image_picker",
+      "id": "image2",
+      "label": "Icon"
+    
+    }
+    ,
+    {
+      "type":"color",
+      "id": "bgcolor",
+      "label": "Background",
+      "default": "#000000"
+    
+    }
+    ,
+    {
+      "type":"color",
+      "id": "txtcolor",
+      "label": "Text",
+      "default": "#f5f5f5"
+    
+    }
+    ,
+    {
+      "type": "font_picker",
+      "id": "txtfam",
+      "label": "Font",
+      "default": "work_sans_n6"
+    
+    
+    }
+    ,
+    {
+        "type": "range",
+        "id": "font_size",
+        "label": "Font Size",
+        "default": 16,
+        "min": 4,
+        "max": 48,
+        "step": 1,
+        "unit": "px"
+       
+      },
+      {
+        "type": "url",
+        "id": "link1",
+        "label": "Social Link1"
+    }
+      ,
+      
+      {
+        "type": "url",
+        "id": "link2",
+        "label": "Social Link2"
+    }
+  ],
+  "presets": [
+    {
+      "name": "announcement bar"
+    }
+  ]
+}
+{% endschema %}
